@@ -1,0 +1,18 @@
+MAGINE Impact Frames
+Copyright 2026 MAGINE AI contributors
+
+This repository contains the Impact Frame feature extracted from the MAGINE
+Canvas working source on 2026-10-25, plus standalone packaging, a CLI, tests,
+documentation and demonstration assets.
+
+For this independent release, the extracted source and documentation are made
+available under the Apache License, Version 2.0. This grant does not apply to
+other MAGINE Canvas source outside this repository or to third-party software.
+
+Changes for extraction include module import paths, the FFmpeg executable
+resolver, standalone build and command-line entry points, and explicit host
+integration boundaries. Canvas integration sources retain their host imports
+unless documented otherwise.
+
+MAGINE names and marks identify the origin of the project; no trademark license
+is granted. Third-party components remain under their respective licenses.

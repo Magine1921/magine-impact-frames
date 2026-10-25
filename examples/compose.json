@@ -1,0 +1,18 @@
+{
+  "videoPath": "../demo-output/source.mp4",
+  "outputPath": "../demo-output/composed.mp4",
+  "points": [
+    {
+      "timestamp": 0.7,
+      "imagePaths": ["../demo-output/impact-1.png", "../demo-output/impact-2.png", "../demo-output/impact-3.png", "../demo-output/impact-4.png", "../demo-output/impact-5.png", "../demo-output/impact-6.png"],
+      "speed": "fast",
+      "transition": "cut"
+    },
+    {
+      "timestamp": 1.7,
+      "imagePaths": ["../demo-output/impact-6.png", "../demo-output/impact-5.png", "../demo-output/impact-4.png", "../demo-output/impact-3.png", "../demo-output/impact-2.png", "../demo-output/impact-1.png"],
+      "speed": "medium",
+      "transition": "flash-white"
+    }
+  ]
+}

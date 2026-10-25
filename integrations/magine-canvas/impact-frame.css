@@ -1,0 +1,297 @@
+/* Extracted impact frame styles. Utility classes require the host's Tailwind build.
+   The original shared background bitmap is omitted; the overlay uses gradients. */
+
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]),
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) *,
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) input[type='range'] {
+  cursor: default !important;
+}
+
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) input[type='range']::-webkit-slider-thumb,
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) input[type='range']::-webkit-slider-runnable-track {
+  cursor: default !important;
+}
+
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) input[type='range']::-moz-range-thumb,
+[data-impact-frame-node] :is([data-impact-timeline], [data-impact-speed-control]) input[type='range']::-moz-range-track {
+  cursor: default !important;
+}
+
+
+@keyframes mc-refine-frame-sweep {
+  from {
+    background-position: 130% 0;
+  }
+
+  to {
+    background-position: -130% 0;
+  }
+}
+
+/* Processing buttons keep their percentage readable above the silver sweep. */
+.mc-impact-processing-button,
+.mc-impact-processing-button:disabled {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  opacity: 1;
+  color: #f4f4f5;
+  border-color: rgb(226 232 240 / 0.28);
+  background: linear-gradient(180deg, #42464c 0%, #282b30 46%, #32363c 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.13), inset 0 -1px 0 rgb(0 0 0 / 0.25);
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.65);
+  font-variant-numeric: tabular-nums;
+}
+
+.mc-impact-processing-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 36%, rgb(205 216 231 / 0.07) 43%, rgb(247 250 255 / 0.3) 49%, rgb(202 212 226 / 0.12) 53%, transparent 62%);
+  background-size: 260% 100%;
+  background-position: 130% 0;
+  animation: mc-refine-frame-sweep 2.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-impact-processing-button::before {
+    animation: none;
+    background-position: 50% 0;
+  }
+}
+
+
+.mc-generation-overlay {
+  --mc-welcome-ink: 4 5 5;
+  --mc-welcome-blue: 30 63 98;
+  --mc-welcome-blue-highlight: 40 88 136;
+  --mc-welcome-copper: 145 63 41;
+  --mc-welcome-copper-highlight: 160 72 48;
+  --mc-welcome-caustic: 230 242 255;
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  pointer-events: none;
+  isolation: isolate;
+  contain: paint;
+  background-color: rgb(var(--mc-welcome-ink));
+  background-image:
+    radial-gradient(ellipse at center, transparent 48%, rgb(var(--mc-welcome-ink) / 0.58) 100%),
+    linear-gradient(118deg, rgb(var(--mc-welcome-ink) / 0.16), rgb(var(--mc-welcome-ink) / 0.42));
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 0 28px rgb(var(--mc-welcome-ink) / 0.72),
+    inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+.mc-generation-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke-width: 2.8px;
+}
+
+.mc-generation-ring-track {
+  stroke: rgb(255 255 255 / 0.12);
+}
+
+.mc-generation-ring-value {
+  stroke: rgb(244 244 245 / 0.96);
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.28));
+  transition: stroke-dashoffset 100ms linear;
+}
+
+.mc-generation-fluid {
+  position: absolute;
+  inset: -18%;
+  z-index: 0;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+.mc-generation-fluid::before {
+  content: '';
+  position: absolute;
+  inset: 12%;
+  background:
+    radial-gradient(ellipse at 18% 42%, rgb(var(--mc-welcome-blue) / 0.58), transparent 50%),
+    radial-gradient(ellipse at 78% 62%, rgb(var(--mc-welcome-copper) / 0.48), transparent 48%);
+}
+
+.mc-generation-fluid-field {
+  position: absolute;
+  inset: -24%;
+  border-radius: 43% 57% 62% 38% / 58% 39% 61% 42%;
+  filter: blur(22px) saturate(1.16);
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  mix-blend-mode: screen;
+}
+
+.mc-generation-fluid-field--blue {
+  opacity: 0.88;
+  background:
+    radial-gradient(ellipse at 48% 50%, rgb(var(--mc-welcome-blue-highlight) / 0.82) 0%, rgb(var(--mc-welcome-blue) / 0.64) 38%, transparent 70%);
+  animation: mc-generation-fluid-blue 5.8s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.mc-generation-fluid-field--cyan {
+  inset: -32% -18%;
+  opacity: 0.54;
+  background:
+    radial-gradient(ellipse at 58% 48%, rgb(var(--mc-welcome-blue-highlight) / 0.66) 0%, rgb(var(--mc-welcome-blue) / 0.42) 37%, transparent 67%);
+  animation: mc-generation-fluid-cyan 4.7s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+}
+
+.mc-generation-fluid-field--amber {
+  inset: -30% -22%;
+  opacity: 0.68;
+  background:
+    radial-gradient(ellipse at 64% 52%, rgb(var(--mc-welcome-copper-highlight) / 0.82) 0%, rgb(var(--mc-welcome-copper) / 0.62) 34%, transparent 68%);
+  animation: mc-generation-fluid-amber 7.1s cubic-bezier(0.45, 0, 0.24, 1) infinite;
+}
+
+.mc-generation-fluid-field--pearl {
+  inset: -35% -28%;
+  opacity: 0.42;
+  background:
+    radial-gradient(ellipse at 50% 48%, rgb(var(--mc-welcome-caustic) / 0.2) 0%, rgb(var(--mc-welcome-blue) / 0.28) 30%, transparent 62%);
+  animation: mc-generation-fluid-pearl 3.9s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+.mc-generation-fluid-sheen {
+  position: absolute;
+  inset: 14%;
+  opacity: 0.26;
+  background:
+    linear-gradient(103deg, transparent 18%, rgb(var(--mc-welcome-caustic) / 0.24) 48%, transparent 75%);
+  filter: blur(13px);
+  will-change: transform, opacity;
+  mix-blend-mode: screen;
+  animation: mc-generation-fluid-sheen 4.3s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+}
+
+/* Small impact previews need distinct moving color fields, not a broad blurred wash. */
+[data-impact-frame-node] .mc-generation-overlay {
+  --mc-welcome-blue: 24 66 160;
+  --mc-welcome-blue-highlight: 43 118 220;
+  --mc-welcome-copper: 172 39 48;
+  --mc-welcome-copper-highlight: 222 64 66;
+}
+
+[data-impact-frame-node] .mc-generation-fluid {
+  inset: -10%;
+}
+
+[data-impact-frame-node] .mc-generation-fluid-field {
+  inset: -12%;
+  filter: blur(10px) saturate(1.25);
+}
+
+[data-impact-frame-node] .mc-generation-fluid-field--blue {
+  animation: mc-impact-fluid-blue 2.8s ease-in-out infinite;
+}
+
+[data-impact-frame-node] .mc-generation-fluid-field--cyan {
+  animation: mc-impact-fluid-blue 3.6s ease-in-out infinite reverse;
+}
+
+[data-impact-frame-node] .mc-generation-fluid-field--amber {
+  animation: mc-impact-fluid-red 3.2s ease-in-out infinite;
+}
+
+[data-impact-frame-node] .mc-generation-fluid-field--pearl,
+[data-impact-frame-node] .mc-generation-fluid-sheen {
+  animation-duration: 2.7s;
+}
+
+@keyframes mc-impact-fluid-blue {
+  0%, 100% { transform: translate3d(-24%, -8%, 0) rotate(-12deg) scale(0.9, 1.1); }
+  40% { transform: translate3d(20%, 12%, 0) rotate(14deg) scale(1.1, 0.85); }
+  72% { transform: translate3d(-8%, 20%, 0) rotate(-5deg) scale(0.85, 1.15); }
+}
+
+@keyframes mc-impact-fluid-red {
+  0%, 100% { transform: translate3d(22%, 14%, 0) rotate(12deg) scale(1.1, 0.9); }
+  44% { transform: translate3d(-20%, -10%, 0) rotate(-14deg) scale(0.85, 1.15); }
+  76% { transform: translate3d(10%, -20%, 0) rotate(6deg) scale(1.1, 0.85); }
+}
+
+.mc-generation-overlay[data-animated='false'] .mc-generation-fluid-field,
+.mc-generation-overlay[data-animated='false'] .mc-generation-fluid-sheen {
+  animation-play-state: paused;
+}
+
+.mc-generation-percent {
+  flex-shrink: 0;
+  color: #e4e4e7;
+  font: 500 11px/1.4 var(--font-mono, monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+.mc-generation-overlay > .mc-generation-percent {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 12px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgb(17 17 17 / 0.88);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mc-generation-fluid-field,
+  .mc-generation-fluid-sheen {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .mc-generation-ring-value {
+    transition: none !important;
+  }
+}
+
+@keyframes mc-generation-fluid-blue {
+  0%, 100% { opacity: 0.76; transform: translate3d(-13%, -3%, 0) rotate(-6deg) scale(1.08, 0.82); }
+  34% { opacity: 0.94; transform: translate3d(7%, 5%, 0) rotate(4deg) scale(0.9, 1.15); }
+  68% { opacity: 0.82; transform: translate3d(-1%, -6%, 0) rotate(-2deg) scale(1.16, 0.93); }
+}
+
+@keyframes mc-generation-fluid-cyan {
+  0%, 100% { opacity: 0.38; transform: translate3d(12%, 6%, 0) rotate(5deg) scale(0.82, 1.12); }
+  42% { opacity: 0.62; transform: translate3d(-9%, -4%, 0) rotate(-4deg) scale(1.14, 0.88); }
+  74% { opacity: 0.48; transform: translate3d(3%, 2%, 0) rotate(2deg) scale(0.96, 1.05); }
+}
+
+@keyframes mc-generation-fluid-amber {
+  0%, 100% { opacity: 0.42; transform: translate3d(25%, 12%, 0) rotate(8deg) scale(0.76, 0.94); }
+  38% { opacity: 0.72; transform: translate3d(-4%, -7%, 0) rotate(-5deg) scale(1.05, 0.78); }
+  72% { opacity: 0.58; transform: translate3d(11%, 2%, 0) rotate(3deg) scale(0.9, 1.09); }
+}
+
+@keyframes mc-generation-fluid-pearl {
+  0%, 100% { opacity: 0.26; transform: translate3d(-4%, 7%, 0) rotate(-3deg) scale(0.72, 0.86); }
+  48% { opacity: 0.48; transform: translate3d(9%, -5%, 0) rotate(5deg) scale(1.02, 0.72); }
+  76% { opacity: 0.34; transform: translate3d(1%, 3%, 0) rotate(0deg) scale(0.84, 1.02); }
+}
+
+@keyframes mc-generation-fluid-sheen {
+  0%, 100% { opacity: 0.12; transform: translate3d(-18%, -3%, 0) rotate(-5deg) scaleX(0.86); }
+  48% { opacity: 0.32; transform: translate3d(12%, 5%, 0) rotate(4deg) scaleX(1.08); }
+  76% { opacity: 0.2; transform: translate3d(-2%, -5%, 0) rotate(-1deg) scaleX(0.95); }
+}

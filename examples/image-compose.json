@@ -1,0 +1,10 @@
+{
+  "sourceImagePath": "../demo-output/reference.png",
+  "outputPath": "../demo-output/image-composed.mp4",
+  "points": [{
+    "timestamp": 0,
+    "imagePaths": ["../demo-output/impact-1.png", "../demo-output/impact-2.png", "../demo-output/impact-3.png", "../demo-output/impact-4.png", "../demo-output/impact-5.png", "../demo-output/impact-6.png"],
+    "speed": "slow",
+    "transition": "dissolve"
+  }]
+}

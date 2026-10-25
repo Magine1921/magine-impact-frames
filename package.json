@@ -1,0 +1,33 @@
+{
+  "name": "magine-impact-frames",
+  "version": "0.1.0",
+  "description": "Impact-frame prompts, multi-point timing and local FFmpeg composition extracted from Magine Canvas",
+  "type": "module",
+  "license": "Apache-2.0",
+  "author": "Magine",
+  "repository": { "type": "git", "url": "git+https://github.com/Magine1921/magine-impact-frames.git" },
+  "homepage": "https://github.com/Magine1921/magine-impact-frames#readme",
+  "bugs": { "url": "https://github.com/Magine1921/magine-impact-frames/issues" },
+  "keywords": ["impact-frames", "ffmpeg", "video", "react-flow", "magine", "skill"],
+  "engines": { "node": ">=22.18.0" },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./server": { "types": "./dist/impact-frame-video.server.d.ts", "import": "./dist/impact-frame-video.server.js" }
+  },
+  "bin": { "impact-frames": "./dist/cli.js" },
+  "files": ["dist", "src", "README.md", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test tests/*.test.mjs integrations/magine-canvas/*.test.mjs",
+    "demo": "npm run build && node scripts/demo.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": { "sharp": "0.35.5" },
+  "optionalDependencies": { "ffmpeg-static": "5.3.0" },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "5.9.3"
+  }
+}

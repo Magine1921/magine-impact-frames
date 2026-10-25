@@ -1,0 +1,13 @@
+node_modules/
+dist/
+demo-output/
+coverage/
+*.tsbuildinfo
+*.log
+*.zip
+*.tgz
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
