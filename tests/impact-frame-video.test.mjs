@@ -179,7 +179,7 @@ test('FFmpeg output flashes every image in order, retains original motion length
   }
 });
 
-test('variable-frame-rate footage displays every impact image without extending the video or shifting its audio', async () => {
+test('variable-frame-rate footage displays every impact image without extending the video or shifting its audio', async (t) => {
   const workDir = mkdtempSync(path.join(tmpdir(), 'magine-impact-vfr-test-'));
   const width = 64, height = 48, frameBytes = width * height * 3;
   const colors = [[0, 255, 0], [0, 0, 255], [255, 255, 255], [255, 255, 0], [0, 255, 255]];
@@ -217,7 +217,15 @@ test('variable-frame-rate footage displays every impact image without extending 
     }
     assert.deepEqual(counts, [2, 2, 2, 2, 2], 'every requested variant appears for exactly two output frames');
     assert.deepEqual(observedOrder, [0, 1, 2, 3, 4]);
-    assert.ok(Math.abs(frames.length / frameBytes / result.fps - 3) <= 1 / result.fps, 'duration stays within one output frame of the source');
+    const outputFrameCount = frames.length / frameBytes;
+    const durationError = Math.abs(outputFrameCount / result.fps - 3);
+    if (durationError > 1 / result.fps) {
+      t.diagnostic(JSON.stringify({ ffmpeg, version: ff(['-version']).toString().split('\n')[0],
+        sourceMetadata: await server.probeImpactFrameVideo(sourcePath),
+        outputMetadata: await server.probeImpactFrameVideo(outputPath),
+        outputFrameCount, frameDuration: outputFrameCount / result.fps, durationError, tolerance: 1 / result.fps, result }));
+    }
+    assert.ok(durationError <= 1 / result.fps, `duration stays within one output frame of the source (frames=${outputFrameCount}, fps=${result.fps}, duration=${result.duration}, error=${durationError})`);
     const audioArgs = ['-map', '0:a:0', '-f', 's16le', '-ac', '1', '-ar', '48000', 'pipe:1'];
     const sourceAudio = ff(['-i', sourcePath, ...audioArgs]);
     const outputAudio = ff(['-i', outputPath, ...audioArgs]);
