@@ -224,6 +224,13 @@ test('variable-frame-rate footage displays every impact image without extending 
         sourceMetadata: await server.probeImpactFrameVideo(sourcePath),
         outputMetadata: await server.probeImpactFrameVideo(outputPath),
         outputFrameCount, frameDuration: outputFrameCount / result.fps, durationError, tolerance: 1 / result.fps, result }));
+      for (const [label, inputPath] of [['source', sourcePath], ['output', outputPath]]) {
+        for (const codec of ['copy', 'rawvideo']) {
+          const crc = ff(['-i', inputPath, '-map', '0:v:0', '-c:v', codec, '-fps_mode', 'passthrough', '-f', 'framecrc', 'pipe:1']).toString();
+          const rows = crc.split('\n').filter((line) => line && !line.startsWith('#'));
+          t.diagnostic(JSON.stringify({ label, codec, count: rows.length, header: crc.split('\n').filter((line) => line.startsWith('#')), first: rows.slice(0, 4), last: rows.slice(-6) }));
+        }
+      }
     }
     assert.ok(durationError <= 1 / result.fps, `duration stays within one output frame of the source (frames=${outputFrameCount}, fps=${result.fps}, duration=${result.duration}, error=${durationError})`);
     const audioArgs = ['-map', '0:a:0', '-f', 's16le', '-ac', '1', '-ar', '48000', 'pipe:1'];
