@@ -200,7 +200,8 @@ test('variable-frame-rate footage displays every impact image without extending 
       return imagePath;
     });
     const outputPath = path.join(workDir, 'vfr-output.mp4');
-    const result = await server.composeImpactFrameVideo({ videoPath: sourcePath, imagePaths: images, outputPath, timestamp: 1.2 });
+    const result = await server.composeImpactFrameVideo({ videoPath: sourcePath, outputPath,
+      points: [{ timestamp: 1.2, imagePaths: images }, { timestamp: 3, imagePaths: images }] });
     const frames = ff(['-i', outputPath, '-map', '0:v:0', '-pix_fmt', 'rgb24', '-fps_mode', 'passthrough', '-f', 'rawvideo', 'pipe:1']);
     const counts = colors.map(() => 0);
     const observedOrder = [];
@@ -215,8 +216,19 @@ test('variable-frame-rate footage displays every impact image without extending 
         [255, 0, 0].forEach((channel, i) => assert.ok(Math.abs(channel - pixel[i]) <= 12, 'frames outside the effect retain the source'));
       }
     }
-    assert.deepEqual(counts, [2, 2, 2, 2, 2], 'every requested variant appears for exactly two output frames');
-    assert.deepEqual(observedOrder, [0, 1, 2, 3, 4]);
+    assert.deepEqual(counts, [4, 4, 4, 4, 4], 'every requested variant appears for exactly two frames at each point, including the video tail');
+    assert.deepEqual(observedOrder, [0, 1, 2, 3, 4, 0, 1, 2, 3, 4]);
+    const lastEffect = result.effects[1];
+    assert.ok(Math.abs(lastEffect.effectEnd - 3) <= 1 / result.fps);
+    for (let index = 0; index < 10; index++) {
+      const frame = Math.round(lastEffect.effectStart * result.fps) + index;
+      const offset = frame * frameBytes + (24 * width + 32) * 3;
+      const actual = [...frames.subarray(offset, offset + 3)];
+      const expected = colors[Math.floor(index / 2)];
+      assert.equal(actual.length, 3, `tail frame ${frame} must exist`);
+      actual.forEach((channel, component) => assert.ok(Math.abs(channel - expected[component]) <= 12,
+        `tail frame ${frame}: expected ${expected}, got ${actual}`));
+    }
     const outputFrameCount = frames.length / frameBytes;
     const durationError = Math.abs(outputFrameCount / result.fps - 3);
     if (durationError > 1 / result.fps) {
