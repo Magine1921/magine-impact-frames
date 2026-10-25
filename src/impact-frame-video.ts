@@ -146,9 +146,9 @@ export function buildImpactFrameFfmpegArgs(params: ImpactFrameVideoInput & {
   const { width, height } = metadata;
   // Phone/screen recordings can have long gaps between source frames. Normalize before
   // the overlays so every flash is represented even in a sparse VFR section.
-  // Keep the base alive until the output's -t boundary. A finite padding duration
-  // can end too early for sparse VFR inputs on FFmpeg 7, clipping tail effects.
-  const filters = [`[0:v:0]scale=${width}:${height},setsar=1,setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop=-1,fps=${metadata.fps}:start_time=0[base]`];
+  // Normalize timestamps before padding so cloned tail frames advance on a
+  // fixed frame rate, including sparse VFR input on FFmpeg 7.
+  const filters = [`[0:v:0]scale=${width}:${height},setsar=1,setpts=PTS-STARTPTS,fps=${metadata.fps}:start_time=0,tpad=stop_mode=clone:stop_duration=${metadata.duration}[base]`];
   let output = 'base';
   let overlayIndex = 0;
   const enable = (start: number, end: number) => {
